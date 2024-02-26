@@ -18,7 +18,12 @@ export const fetchCartData = () => {
 
     try {
       const cartData = await fetchData();
-      dispatch(cartAction.replaceCart(cartData));
+      dispatch(
+        cartAction.replaceCart({
+          items: cartData.item || [],
+          totalQuantity: cartData.totalQuantity,
+        })
+      );
     } catch (error) {
       dispatch(
         uiActions.showNotification({
@@ -46,7 +51,10 @@ export const sendCartData = (cart) => {
         "https://troxip-6e4cd-default-rtdb.firebaseio.com/cart.json",
         {
           method: "PUT",
-          body: JSON.stringify(cart),
+          body: JSON.stringify({
+            item: cart.items,
+            totalQuantity: cart.totalQuantity,
+          }),
         }
       );
 
